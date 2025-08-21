@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Edit Book - Pahana Edu</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-image: url('../images/book1.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      font-family: Arial, sans-serif;
+      color: #fff;
+    }
+    .form-container {
+      background: rgba(0, 0, 0, 0.8);
+      padding: 30px;
+      border-radius: 10px;
+      width: 400px;
+      margin: 50px auto;
+    }
+    .form-container h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #fff;
+    }
+    .form-container input[type="text"],
+    .form-container input[type="number"],
+    .form-container input[type="file"] {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      background: rgba(255, 255, 255, 0.9);
+      color: #333;
+    }
+    .form-container input[type="submit"] {
+      width: 100%;
+      padding: 12px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+    .form-container input[type="submit"]:hover {
+      background: #45a049;
+    }
+    .login-link {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+      color: #4CAF50;
+      text-decoration: none;
+    }
+    .login-link:hover {
+      text-decoration: underline;
+    }
+    .navbar {
+      background: rgba(0, 0, 0, 0.8);
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+    }
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      margin-left: 20px;
+      padding: 8px 15px;
+      border-radius: 5px;
+      transition: background 0.3s;
+    }
+    .nav-links a:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="logo">📘 Pahana Edu</div>
+    <nav class="nav-links">
+      <a href="admin_dashboard.html">Home</a>
+      <a href="logout.html">Logout</a>
+    </nav>
+  </header>
+
+  <!-- Edit Book Form -->
+  <section class="form-section">
+    <div class="form-container">
+      <h2>Edit Book</h2>
+
+      <form id="editBookForm" enctype="multipart/form-data">
+        <!-- Hidden field for book code -->
+        <input type="hidden" name="bookCode" id="bookCode" />
+        
+        <input type="text" name="bookTitle" id="bookTitle" placeholder="Book Title" required />
+        <input type="text" name="bookCategory" id="bookCategory" placeholder="Book Category" required />
+        <input type="number" name="price" id="price" placeholder="Price (Rs.)" step="0.01" required />
+        <input type="number" name="quantity" id="quantity" placeholder="Available Quantity" required />
+
+        <div id="imageSection">
+          <label>Current Image</label><br/>
+          <img id="currentImage" src="../images/default-book.jpg" alt="Current Book" width="80" height="100" /><br/><br/>
+        </div>
+
+        <label>Upload New Image (optional)</label>
+        <input type="file" name="bookImage" accept="image/*" />
+
+        <input type="submit" value="Update Book" />
+      </form>
+
+      <a class="login-link" href="manage_items.html">Back to Manage Books</a>
+    </div>
+  </section>
+
+  <script>
+    // Get book code from URL parameters
+    function getBookCodeFromURL() {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get('code');
+    }
+
+    // Load book data when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        const bookCode = getBookCodeFromURL();
+        
+        if (bookCode) {
+            loadBookData(bookCode);
+        } else {
+            alert('No book code provided!');
+            window.location.href = 'manage_items.html';
+        }
+    });
+
+    // Load book data from server
+    async function loadBookData(bookCode) {
+        try {
+            const response = await fetch(`http://localhost:8080/Pahana_edu_backend2/GetBookServlet?code=${bookCode}`, {
+                method: 'GET',
+                credentials: 'include'
+            });
+            
+            if (!response.ok) throw new Error('Failed to fetch book data');
+            
+            const result = await response.json();
+            
+            if (result.status === 'success') {
+                populateForm(result);
+            } else {
+                alert('Book not found: ' + result.message);
+                window.location.href = 'manage_items.html';
+            }
+            
+        } catch (error) {
+            console.error('Error loading book:', error);
+            alert('Failed to load book data: ' + error.message);
+            window.location.href = 'manage_items.html';
+        }
+    }
+
+    // Populate form with book data
+    function populateForm(bookData) {
+        document.getElementById('bookCode').value = bookData.bookCode;
+        document.getElementById('bookTitle').value = bookData.bookTitle;
+        document.getElementById('bookCategory').value = bookData.bookCategory;
+        document.getElementById('price').value = bookData.price;
+        document.getElementById('quantity').value = bookData.availableQuantity;
+        
+        // Display current image using the ImageServlet
+        const currentImage = document.getElementById('currentImage');
+        currentImage.src = `http://localhost:8080/Pahana_edu_backend2/BookImageServlet?code=${bookData.bookCode}`;
+        currentImage.onerror = function() {
+            this.src = '../images/default-book.jpg';
+        };
+    }
+
+    // Handle form submission
+    document.getElementById('editBookForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(this);
+        
+        try {
+            const response = await fetch('http://localhost:8080/Pahana_edu_backend2/UpdateBookServlet', {
+                method: 'POST',
+                body: formData,
+                credentials: 'include'
+            });
+            
+            if (!response.ok) throw new Error('Failed to update book');
+            
+            const result = await response.json();
+            alert(result.message);
+            
+            if (result.status === 'success') {
+                window.location.href = 'manage_items.html';
+            }
+            
+        } catch (error) {
+            console.error('Error updating book:', error);
+            alert('Failed to update book: ' + error.message);
+        }
+    });
+  </script>
+
+</body>
+</html>

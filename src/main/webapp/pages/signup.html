@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Register New User - Pahana Edu</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-image: url('../images/book1.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      font-family: Arial, sans-serif;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h2>User Signup - Pahana Edu</h2>
+
+    <form id="signupForm">
+      <input type="text" name="fullName" id="fullName" placeholder="Full Name" required />
+      <input type="email" name="email" id="email" placeholder="Email Address" required />
+      <input type="text" name="username" id="username" placeholder="Username" required />
+      <input type="password" name="password" id="password" placeholder="Password" required />
+
+      <select name="role" id="role" required>
+        <option value="">Select Role</option>
+        <option value="admin">Admin</option>
+        <option value="cashier">Cashier</option>
+      </select>
+
+      <input type="submit" value="Signup" />
+    </form>
+
+    <a class="login-link" href="login.html">Already have an account? Login</a>
+  </div>
+
+  <script src="../js/signup.js"></script>
+
+</body>
+</html>

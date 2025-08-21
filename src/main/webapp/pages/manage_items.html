@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Manage Books - Admin | Pahana Edu</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  
+    
+
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="logo">📘 Pahana Edu</div>
+    <nav class="nav-links">
+      <a href="admin_dashboard.html">Dashboard</a>
+      <a href="logout.html">Logout</a>
+    </nav>
+  </header>
+
+  <!-- Add New Book -->
+  <section class="form-section">
+    <div class="form-container">
+      <h2>Add New Book</h2>
+      <form id="addBookForm" enctype="multipart/form-data">
+        <input type="text" name="bookTitle" placeholder="Book Title" required />
+        <input type="text" name="bookCategory" placeholder="Book Category" required />
+        <input type="number" name="price" placeholder="Price (Rs.)" step="0.01" required />
+        <input type="number" name="quantity" placeholder="Available Quantity" required />
+        <label for="bookImage">Upload Book Image</label>
+        <input type="file" name="bookImage" accept="image/*" required />
+        <input type="submit" value="Add Book" />
+      </form>
+    </div>
+  </section>
+
+  <!-- View / Manage Books -->
+  <section class="table-section">
+    <div class="table-container">
+      <h2>Available Books</h2>
+      
+      <!-- 🔍 Search Bar -->
+    <div class="search-bar">
+      <input type="text" id="categorySearch" placeholder="Search by category (e.g. Fiction, Short Story)" onkeyup="filterBooks()" />
+    </div>
+
+      <table class="styled-table">
+        <thead>
+          <tr>
+            <th>Image</th>
+            <th>Code</th>
+            <th>Title</th>
+            <th>Category</th>
+            <th>Price (Rs.)</th>
+            <th>Quantity</th> 
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Sample Data (Replace with dynamic data from backend) -->
+          <tr>
+            <td><img src="../images/B1.jfif" alt="Book 1" width="50" height="70" /></td>
+            <td>B101</td>
+            <td>The Hidden Island</td>
+            <td>Fiction</td>
+            <td>1200</td>
+            <td>10</td>
+            <td>
+         
+              <a href="edit_items.html?code=B101" class="edit-link">Edit</a>
+              
+              <a href="DeleteBookServlet?code=B101" class="btn-delete" onclick="return confirm('Are you sure?')">Delete</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+  
+  <!-- JavaScript Logic -->
+  <script src="../js/manage_items.js"></script>
+
+
+</body>
+</html>

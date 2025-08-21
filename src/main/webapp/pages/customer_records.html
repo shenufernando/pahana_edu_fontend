@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Customer Records - Pahana Edu</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    .search-bar {
+      text-align: center;
+      margin: 20px;
+    }
+
+    .search-bar input[type="text"] {
+      padding: 10px;
+      width: 50%;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="logo">📘 Pahana Edu</div>
+    <nav class="nav-links">
+      <a href="admin_dashboard.html">Home</a>
+      <a href="logout.html">Logout</a>
+    </nav>
+  </header>
+
+ 
+
+  <!-- Customer Records Table -->
+  <section class="table-section">
+    <div class="table-container">
+      <h2 style="text-align:center;">Customer Records</h2>
+      
+      
+      <!-- Search Input -->
+  <div class="search-bar">
+    <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Search for customers...">
+  </div>
+
+
+      <table id="customerTable">
+        <thead>
+          <tr>
+            <th>Account No</th>
+            <th>Name</th>
+            <th>Address</th>
+            <th>Phone</th>
+            <th>Units Consumed</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1001</td>
+            <td>John Silva</td>
+            <td>Colombo 7</td>
+            <td>0712345678</td>
+            <td>150</td>
+            <td class="action-links">
+              <a href="DeleteCustomerServlet?accountNo=1001" class="delete-link" onclick="return confirm('Are you sure you want to delete this customer?');">Delete</a>
+            </td>
+          </tr>
+          <tr>
+            <td>1002</td>
+            <td>Sara Perera</td>
+            <td>Kandy</td>
+            <td>0779876543</td>
+            <td>90</td>
+            <td class="action-links">
+              <a href="DeleteCustomerServlet?accountNo=1002" class="delete-link" onclick="return confirm('Are you sure you want to delete this customer?');">Delete</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  
+
+<script src="../js/script.js"></script>
+</body>
+</html>

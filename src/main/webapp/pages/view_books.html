@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>View Books - Cashier | Pahana Edu</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    .search-bar {
+      text-align: center;
+      margin: 30px 0;
+    }
+
+    .search-bar input {
+      padding: 10px;
+      width: 300px;
+      border: 2px solid #003366;
+      border-radius: 5px;
+      font-size: 1em;
+    }
+
+    .search-bar input:focus {
+      outline: none;
+      border-color: #ff9900;
+    }
+
+    .table-section {
+      padding: 20px;
+    }
+
+    .styled-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .styled-table th,
+    .styled-table td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: center;
+    }
+
+    .styled-table th {
+      background-color: #003366;
+      color: white;
+    }
+
+    .styled-table tr:hover {
+      background-color: #f2f2f2;
+    }
+
+    /* Loading state */
+    .loading {
+      opacity: 0.6;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+<header class="navbar">
+  <div class="logo">📘 Pahana Edu</div>
+  <nav class="nav-links">
+    <a href="cashier_dashboard.html">Dashboard</a>
+    <a href="logout.html">Logout</a>
+  </nav>
+</header>
+
+<section class="table-section">
+  <div class="table-container">
+    <h2>Available Books</h2>
+
+    <!-- 🔍 Search Bar -->
+    <div class="search-bar">
+      <input type="text" id="categorySearch" placeholder="Search by category (e.g. Fiction, Short Story)" onkeyup="filterBooks()" />
+    </div>
+
+    <!-- 📚 Book Table -->
+    <table class="styled-table" id="booksTable">
+      <thead>
+        <tr>
+          <th>Image</th>
+          <th>Book Code</th>
+          <th>Title</th>
+          <th>Category</th>
+          <th>Price</th>
+          <th>Quantity</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td colspan="6" style="text-align: center; padding: 20px; color: #666;">
+            Loading books...
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- JavaScript Logic -->
+<script src="../js/cashier_view_books.js"></script>
+
+</body>
+</html>

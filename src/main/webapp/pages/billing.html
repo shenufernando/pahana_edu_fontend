@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Billing - Pahana Edu</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="logo">📘 Pahana Edu</div>
+    <nav class="nav-links">
+      <a href="cashier_dashboard.html">Home</a>
+      <a href="logout.html">Logout</a>
+    </nav>
+  </header>
+
+  <!-- Billing Container -->
+  <section class="billing-container">
+    <h2>🧾 Generate Bill</h2>
+
+   <!-- Select customer -->
+<div class="form-group">
+  <label for="customerSelect">Select Customer:</label>
+  <select id="customerSelect" required></select>
+</div>
+
+<!-- Item input -->
+  <!-- <input type="number" id="unitsInput" placeholder="Units Consumed" min="1" required /> _->
+
+<!-- Units Consumed Display -->
+
+<button onclick="addBill()">Generate Bill</button>
+
+
+    
+    <!-- Book Item Category -->
+<label for="categorySelect">Select Category</label>
+<select id="categorySelect" required>
+  <option value="">-- Select Category --</option>
+  <option value="fiction">Fiction</option>
+  <option value="children">Children's Book</option>
+  <option value="shortstory">Short Story</option>
+</select>
+
+    <!-- Book Item Selection -->
+    <label for="itemSelect">Select Book</label>
+    <select id="itemSelect" required>
+      <option value="" data-price="0">-- Select Book --</option>
+      <option value="B101" data-price="1200">The Hidden Island - Rs.1200</option>
+      <option value="B102" data-price="950">Science in Life - Rs.950</option>
+    </select>
+
+    <!-- Quantity -->
+    <label for="qtyInput">Units Consumed</label>
+    <input type="number" id="qtyInput" min="1" value="1" />
+    
+    
+    
+
+    <!-- Add to Bill -->
+    <button id="addItemBtn">Add to Bill</button>
+
+    <!-- 🔽 Payment Method Section (Moved below "Add to Bill") -->
+    <label for="paymentMethod">Payment Method</label>
+    <select id="paymentMethod" required>
+      <option value="">-- Select Payment Method --</option>
+      <option value="cash">Cash</option>
+      <option value="card">Card</option>
+    </select>
+
+    <!-- Card Payment Section -->
+    <div id="cardSection" style="display: none;">
+      <label for="cardName">Cardholder Name</label>
+      <input type="text" id="cardName" placeholder="Name on Card" />
+
+      <label for="cardNumber">Card Number</label>
+      <input type="text" id="cardNumber" placeholder="XXXX-XXXX-XXXX-XXXX" maxlength="19" />
+
+      <label for="cvv">CVV</label>
+      <input type="password" id="cvv" maxlength="4" placeholder="***" />
+    </div>
+
+    <!-- Total Price -->
+    <div class="total-price">Total: Rs. <span id="totalAmount">0</span></div>
+
+    
+    <!-- Bill Output -->
+    <pre id="billOutput"></pre>
+  </section>
+
+  <!-- JavaScript Logic -->
+  <script src="../js/billing.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,46 @@
+ <!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Edit Customer - Pahana Edu</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="logo">📘 Pahana Edu</div>
+    <nav class="nav-links">
+      <a href="cashier_dashboard.html">Home</a>
+      <a href="logout.html">Logout</a>
+    </nav>
+  </header>
+
+  <!-- Customer Form --> 
+  <section class="form-section">
+    <div class="form-container">
+      <h2>Edit Customer</h2>
+
+      <form action="AddCustomerServlet" method="post">
+        <input type="text" name="accountNo" placeholder="Account Number" required />
+        <input type="text" name="name" placeholder="Customer Name" required />
+        <input type="text" name="address" placeholder="Address" required />
+        <input type="text" name="phone" placeholder="Phone Number" required />
+        
+
+        
+
+        <input type="submit" value="Update Customer" />
+      </form>
+
+      <a class="login-link" href="view_customers.html">View Customer Records</a>
+    </div>
+  </section>
+  
+   <script src="../js/edit_customer.js"></script>
+
+
+</body>
+</html>

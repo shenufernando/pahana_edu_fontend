@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Manage Users - Admin | Pahana Edu</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="logo">📘 Pahana Edu</div>
+    <nav class="nav-links">
+      <a href="admin_dashboard.html">Dashboard</a>
+      <a href="logout.html">Logout</a>
+    </nav>
+  </header>
+
+  <!-- Manage Users Section -->
+  <section class="billing-container">
+    <h2>Manage Users</h2>
+
+    <a href="signup.html" class="btn" style="margin-bottom: 20px; display: inline-block;">➕ Add New User</a>
+
+    <table class="styled-table" id="userTable">
+      <thead>
+        <tr>
+          <th>User ID</th>
+          <th>Full Name</th>
+          <th>Email Address</th>
+          <th>Role</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Dynamic content loaded by manage_users.js -->
+      </tbody>
+    </table>
+  </section>
+
+  <!-- Edit Popup -->
+  <div class="popup-overlay" id="popupOverlay">
+    <div class="popup">
+      <h3>Edit User</h3>
+      <input type="text" id="editName" placeholder="Full Name">
+      <input type="email" id="editEmail" placeholder="Email Address">
+      <button onclick="saveEdit()">Save</button>
+      <button onclick="closePopup()">Cancel</button>
+    </div>
+  </div>
+
+  <!-- External JS that loads dynamic users -->
+  <script src="../js/manage_users.js"></script>
+
+</body>
+</html>

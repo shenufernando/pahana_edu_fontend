@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Customer Records - Pahana Edu</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="logo">📘 Pahana Edu</div>
+    <nav class="nav-links">
+      <a href="cashier_dashboard.html">Home</a>
+      <a href="logout.html">Logout</a>
+    </nav>
+  </header>
+
+  <!-- Customer Records Table -->
+  <section class="table-section">
+    <div class="table-container">
+      <h2 style="text-align:center; margin-top: 20px;">Customer Records</h2>
+      
+      
+            <!-- Search Input -->
+  <div class="search-bar">
+    <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Search for Customer records...">
+  </div>
+
+      <table id="customerTable">
+        <thead>
+          <tr>
+            <th>Account No</th>
+            <th>Name</th>
+            <th>Address</th>
+            <th>Phone</th>
+            <th>Units Consumed</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Sample Data -->
+          <tr>
+            <td>1001</td>
+            <td>John Silva</td>
+            <td>Colombo 7</td>
+            <td>0712345678</td>
+            <td>150</td>
+            <td class="action-links">
+              <a href="edit_customer.html?accountNo=1001" class="edit-link">Edit</a>
+            </td>
+          </tr>
+          <tr>
+            <td>1002</td>
+            <td>Sara Perera</td>
+            <td>Kandy</td>
+            <td>0779876543</td>
+            <td>90</td>
+            <td class="action-links">
+              <a href="edit_customer.html?accountNo=1002" class="edit-link">Edit</a>
+            </td>
+          </tr>
+          <!-- Add more rows dynamically -->
+        </tbody>
+      </table>
+    </div>
+  </section>
+  
+  <script src="../js/script.js"></script>
+
+</body>
+</html>

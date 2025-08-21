@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Billing Records - Pahana Edu</title>
+  <link rel="stylesheet" href="../css/style.css" />
+ 
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="logo">📘 Pahana Edu</div>
+    <nav class="nav-links"> 
+      <a href="admin_dashboard.html"> Home</a>
+      
+     <a href="logout.html">🚪 Logout</a>
+    </nav>
+  </header>
+
+  <!-- Page Content -->
+  <div class="container">
+    <h2>All Billing Records</h2>
+    
+       <!-- Search Input -->
+  <div class="search-bar">
+    <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Search for Billis...">
+  </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Bill ID</th>
+          <th>Date</th>
+          <th>Customer</th>
+          <th>Items</th>
+          <th>Total (Rs.)</th>
+          <th>Payment</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>2025-07-22</td>
+          <td>John Silva</td>
+          
+          <td>1 x The Hidden Island<br>2 x Science in Life</td>
+          <td>3100</td>
+          <td>Card</td>
+          <td class="action-links">
+            
+            <a href="#" onclick="deleteRow(this)" style="color:red;">Delete</a>
+          </td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>2025-07-23</td>
+          <td>Sara Perera</td>
+         
+          <td>1 x The Hidden Island</td>
+          <td>1200</td>
+          <td>Cash</td>
+          <td class="action-links">
+            
+            <a href="#" onclick="deleteRow(this)" style="color:red;">Delete</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    function deleteRow(link) {
+      if (confirm("Are you sure you want to delete this record?")) {
+        const row = link.closest("tr");
+        row.remove();
+      }
+    }
+  </script>
+  
+   <script src="../js/script.js"></script>
+
+
+</body>
+</html>
