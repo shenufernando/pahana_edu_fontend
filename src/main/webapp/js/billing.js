@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
     setupEventListeners();
 });
 
-// Load customers for dropdown
+// Load customers for dropdown - FIXED VERSION
 async function loadCustomers() {
     try {
         console.log("Loading customers...");
@@ -41,8 +41,42 @@ async function loadCustomers() {
         
     } catch (error) {
         console.error('Error loading customers:', error);
-        alert('Failed to load customers: ' + error.message);
+        
+        // Show error message in the dropdown itself
+        const dropdown = document.getElementById('customerSelect');
+        dropdown.innerHTML = `
+            <option value="">-- Error loading customers --</option>
+            <option value="">Please check console for details</option>
+        `;
+        
+        alert('Failed to load customers. Please check browser console for details.');
     }
+}
+
+// Populate customer dropdown - FIXED VERSION
+function populateCustomerDropdown(customers) {
+    const dropdown = document.getElementById('customerSelect');
+    
+    if (!dropdown) {
+        console.error('Customer select dropdown not found!');
+        return;
+    }
+    
+    dropdown.innerHTML = '<option value="">-- Select Customer --</option>';
+    
+    if (!customers || customers.length === 0) {
+        dropdown.innerHTML += '<option value="">No customers found</option>';
+        return;
+    }
+    
+    customers.forEach(customer => {
+        const option = document.createElement('option');
+        option.value = customer.accountNo || customer.customerId;
+        option.textContent = `${customer.name || 'Unknown'} (${customer.phone || 'No phone'}) - Acc: ${customer.accountNo || customer.customerId}`;
+        dropdown.appendChild(option);
+    });
+    
+    console.log(`Populated ${customers.length} customers`);
 }
 
 // Load books for dropdown
@@ -111,22 +145,15 @@ async function loadCategories() {
     }
 }
 
-// Populate customer dropdown
-function populateCustomerDropdown(customers) {
-    const dropdown = document.getElementById('customerSelect');
-    dropdown.innerHTML = '<option value="">-- Select Customer --</option>';
-    
-    customers.forEach(customer => {
-        const option = document.createElement('option');
-        option.value = customer.accountNo;
-        option.textContent = `${customer.name} (${customer.phone}) - Acc: ${customer.accountNo}`;
-        dropdown.appendChild(option);
-    });
-}
-
 // Populate category dropdown
 function populateCategoryDropdown(categories) {
     const dropdown = document.getElementById('categorySelect');
+    
+    if (!dropdown) {
+        console.error('Category select dropdown not found!');
+        return;
+    }
+    
     dropdown.innerHTML = '<option value="">-- Select Category --</option>';
     
     categories.forEach(category => {
@@ -141,6 +168,11 @@ function populateCategoryDropdown(categories) {
 function updateBookDropdown() {
     const category = document.getElementById('categorySelect').value;
     const bookDropdown = document.getElementById('itemSelect');
+    
+    if (!bookDropdown) {
+        console.error('Item select dropdown not found!');
+        return;
+    }
     
     bookDropdown.innerHTML = '<option value="">-- Select Book --</option>';
     
@@ -170,16 +202,27 @@ function updateBookDropdown() {
 // Setup event listeners
 function setupEventListeners() {
     // Payment method toggle
-    document.getElementById('paymentMethod').addEventListener('change', function() {
-        const cardSection = document.getElementById('cardSection');
-        cardSection.style.display = this.value === 'card' ? 'block' : 'none';
-    });
+    const paymentMethod = document.getElementById('paymentMethod');
+    if (paymentMethod) {
+        paymentMethod.addEventListener('change', function() {
+            const cardSection = document.getElementById('cardSection');
+            if (cardSection) {
+                cardSection.style.display = this.value === 'card' ? 'block' : 'none';
+            }
+        });
+    }
     
     // Category change event
-    document.getElementById('categorySelect').addEventListener('change', updateBookDropdown);
+    const categorySelect = document.getElementById('categorySelect');
+    if (categorySelect) {
+        categorySelect.addEventListener('change', updateBookDropdown);
+    }
     
     // Add item button
-    document.getElementById('addItemBtn').addEventListener('click', addItemToBill);
+    const addItemBtn = document.getElementById('addItemBtn');
+    if (addItemBtn) {
+        addItemBtn.addEventListener('click', addItemToBill);
+    }
     
     // Card number formatting
     const cardNumberInput = document.getElementById('cardNumber');
@@ -196,6 +239,11 @@ function setupEventListeners() {
 function addItemToBill() {
     const bookSelect = document.getElementById('itemSelect');
     const quantityInput = document.getElementById('qtyInput');
+    
+    if (!bookSelect || !quantityInput) {
+        alert('Form elements not found!');
+        return;
+    }
     
     const bookCode = bookSelect.value;
     const bookText = bookSelect.options[bookSelect.selectedIndex].text;
@@ -242,6 +290,11 @@ function updateBillDisplay() {
     const totalElement = document.getElementById('totalAmount');
     const billOutput = document.getElementById('billOutput');
     
+    if (!totalElement || !billOutput) {
+        console.error('Bill display elements not found!');
+        return;
+    }
+    
     totalElement.textContent = totalAmount.toFixed(2);
     
     // Create bill preview
@@ -267,6 +320,11 @@ async function addBill() {
     const cardName = document.getElementById('cardName');
     const cardNumber = document.getElementById('cardNumber');
     const cvv = document.getElementById('cvv');
+    
+    if (!customerSelect) {
+        alert('Customer selection not found!');
+        return;
+    }
     
     // Validation
     if (!customerSelect.value) {
@@ -306,17 +364,19 @@ async function addBill() {
     try {
         // Show loading state
         const generateBtn = document.querySelector('button[onclick="addBill()"]');
-        const originalText = generateBtn.textContent;
-        generateBtn.textContent = 'Generating Bill...';
-        generateBtn.disabled = true;
+        if (generateBtn) {
+            const originalText = generateBtn.textContent;
+            generateBtn.textContent = 'Generating Bill...';
+            generateBtn.disabled = true;
+        }
         
         // Prepare bill data
         const billData = {
             customerId: customerSelect.value,
             paymentMethod: paymentMethod.value,
-            cardName: cardName.value || '',
-            cardNumber: cardNumber.value.replace(/\D/g, '') || '', // Remove dashes from card number
-            cvv: cvv.value || '',
+            cardName: cardName ? cardName.value || '' : '',
+            cardNumber: cardNumber ? cardNumber.value.replace(/\D/g, '') || '' : '',
+            cvv: cvv ? cvv.value || '' : '',
             items: billItems
         };
         
@@ -350,8 +410,18 @@ async function addBill() {
         console.log('Bill result:', result);
         
         if (result.status === 'success') {
-            alert(`✅ Bill generated successfully!\nBill ID: ${result.billId}\nTotal: Rs. ${result.totalAmount.toFixed(2)}`);
-            resetBill();
+            const successMessage = `✅ Bill generated successfully!\nBill ID: ${result.billId}\nTotal: Rs. ${result.totalAmount.toFixed(2)}`;
+            
+            // Ask user if they want to download the bill
+            if (confirm(successMessage + '\n\nWould you like to download the bill as PDF?')) {
+                downloadBill(result.billId);
+            }
+            
+            // Reset bill after successful submission
+            setTimeout(() => {
+                resetBill();
+            }, 1000);
+            
         } else {
             throw new Error(result.message || 'Failed to generate bill');
         }
@@ -369,19 +439,145 @@ async function addBill() {
     }
 }
 
+// Download bill as PDF
+async function downloadBill(billId = null) {
+    try {
+        // If we have a bill ID, fetch the bill details
+        let billData = null;
+        
+        if (billId) {
+            // Fetch bill details from server
+            const response = await fetch(`http://localhost:8080/Pahana_edu_backend2/GetBillServlet?billId=${billId}`, {
+                method: 'GET',
+                credentials: 'include'
+            });
+            
+            if (response.ok) {
+                billData = await response.json();
+            }
+        }
+        
+        // If we don't have bill data from server, use local data
+        if (!billData) {
+            const customerSelect = document.getElementById('customerSelect');
+            const customerText = customerSelect.options[customerSelect.selectedIndex].text;
+            
+            billData = {
+                billId: billId || 'TEMP-' + Date.now(),
+                customer: customerText,
+                items: billItems,
+                totalAmount: totalAmount,
+                date: new Date().toLocaleDateString()
+            };
+        }
+        
+        // Create a printable bill content
+        const billContent = `
+            <html>
+                <head>
+                    <title>Bill ${billData.billId}</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; margin: 20px; }
+                        .header { text-align: center; margin-bottom: 20px; }
+                        .bill-details { margin-bottom: 20px; }
+                        table { width: 100%; border-collapse: collapse; }
+                        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+                        th { background-color: #f2f2f2; }
+                        .total { font-weight: bold; text-align: right; margin-top: 20px; }
+                        .footer { margin-top: 30px; text-align: center; font-size: 0.8em; color: #666; }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <h1>PAHANA EDU</h1>
+                        <h2>INVOICE</h2>
+                    </div>
+                    
+                    <div class="bill-details">
+                        <p><strong>Bill ID:</strong> ${billData.billId}</p>
+                        <p><strong>Date:</strong> ${billData.date || new Date().toLocaleDateString()}</p>
+                        <p><strong>Customer:</strong> ${billData.customer || 'Unknown'}</p>
+                    </div>
+                    
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th>Quantity</th>
+                                <th>Unit Price (Rs.)</th>
+                                <th>Total (Rs.)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${billData.items.map(item => `
+                                <tr>
+                                    <td>${item.bookName}</td>
+                                    <td>${item.quantity}</td>
+                                    <td>${item.unitPrice.toFixed(2)}</td>
+                                    <td>${item.totalPrice.toFixed(2)}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                    
+                    <div class="total">
+                        <h3>Total Amount: Rs. ${billData.totalAmount.toFixed(2)}</h3>
+                    </div>
+                    
+                    <div class="footer">
+                        <p>Thank you for your business!</p>
+                        <p>Pahana Edu - Quality Educational Materials</p>
+                    </div>
+                </body>
+            </html>
+        `;
+        
+        // Create a new window for printing
+        const printWindow = window.open('', '_blank');
+        printWindow.document.open();
+        printWindow.document.write(billContent);
+        printWindow.document.close();
+        
+        // Wait for content to load then print
+        printWindow.onload = function() {
+            printWindow.print();
+            // printWindow.close(); // Uncomment to close after printing
+        };
+        
+    } catch (error) {
+        console.error('Error downloading bill:', error);
+        alert('Failed to generate bill PDF. Please try printing the page instead.');
+    }
+}
+
+// Print bill
+function printBill() {
+    window.print();
+}
+
 // Reset bill
 function resetBill() {
     billItems = [];
     totalAmount = 0;
     updateBillDisplay();
-    document.getElementById('customerSelect').value = '';
-    document.getElementById('paymentMethod').value = '';
-    document.getElementById('cardName').value = '';
-    document.getElementById('cardNumber').value = '';
-    document.getElementById('cvv').value = '';
-    document.getElementById('cardSection').style.display = 'none';
-    document.getElementById('categorySelect').value = '';
-    document.getElementById('itemSelect').innerHTML = '<option value="">-- Select Book --</option>';
+    
+    const customerSelect = document.getElementById('customerSelect');
+    const paymentMethod = document.getElementById('paymentMethod');
+    const cardName = document.getElementById('cardName');
+    const cardNumber = document.getElementById('cardNumber');
+    const cvv = document.getElementById('cvv');
+    const cardSection = document.getElementById('cardSection');
+    const categorySelect = document.getElementById('categorySelect');
+    const itemSelect = document.getElementById('itemSelect');
+    
+    if (customerSelect) customerSelect.value = '';
+    if (paymentMethod) paymentMethod.value = '';
+    if (cardName) cardName.value = '';
+    if (cardNumber) cardNumber.value = '';
+    if (cvv) cvv.value = '';
+    if (cardSection) cardSection.style.display = 'none';
+    if (categorySelect) categorySelect.value = '';
+    if (itemSelect) itemSelect.innerHTML = '<option value="">-- Select Book --</option>';
 }
 
 // Add some CSS for better styling
@@ -489,5 +685,72 @@ style.textContent = `
         color: #28a745;
         font-weight: bold;
     }
+    
+    .bill-actions {
+        display: flex;
+        gap: 10px;
+        margin: 20px 0;
+    }
+    
+    .btn-download, .btn-print {
+        flex: 1;
+        padding: 12px;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: transform 0.2s ease;
+    }
+    
+    .btn-download {
+        background: #28a745;
+        color: white;
+    }
+    
+    .btn-print {
+        background: #17a2b8;
+        color: white;
+    }
+    
+    .btn-download:hover, .btn-print:hover {
+        transform: translateY(-2px);
+        opacity: 0.9;
+    }
+    
+    @media (max-width: 600px) {
+        .bill-actions {
+            flex-direction: column;
+        }
+    }
+    
+    @media print {
+        body * {
+            visibility: hidden;
+        }
+        #billOutput, #billOutput * {
+            visibility: visible;
+        }
+        #billOutput {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            background: white;
+            padding: 20px;
+        }
+    }
 `;
 document.head.appendChild(style);
+
+// Add download and print buttons
+document.addEventListener('DOMContentLoaded', function() {
+    const billOutput = document.getElementById('billOutput');
+    if (billOutput) {
+        billOutput.insertAdjacentHTML('afterend', `
+            <div class="bill-actions">
+                <button onclick="downloadBill()" class="btn-download">📄 Download Bill as PDF</button>
+                <button onclick="printBill()" class="btn-print">🖨️ Print Bill</button>
+            </div>
+        `);
+    }
+});
