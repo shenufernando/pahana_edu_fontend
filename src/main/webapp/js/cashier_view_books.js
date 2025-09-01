@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
 async function loadBooks() {
     try {
         console.log("Loading books from server...");
-        const response = await fetch('http://localhost:8080/Pahana_edu_backend2/GetAllBooksServlet', {
+        const response = await fetch('http://localhost:8080/Pahana_edu_backend2/ViewBooksServlet', {
             method: 'GET',
             credentials: 'include'
         });
@@ -24,10 +24,17 @@ async function loadBooks() {
         
         const result = await response.json();
         console.log('Server returned:', result);
+        console.log('result.success:', result.success);
+        console.log('result.success type:', typeof result.success);
+        console.log('result.books:', result.books);
         
-        if (result.status === "success") {
+        // Check for result.success (boolean) - but let's be more flexible
+        if (result.success === true || result.success === "true") {
+            console.log('Success condition met, populating table...');
             populateBooksTable(result.books);
         } else {
+            console.log('Success condition failed');
+            console.log('Available properties:', Object.keys(result));
             throw new Error(result.message || 'Unknown server error');
         }
         
@@ -79,9 +86,13 @@ function populateBooksTable(books) {
     books.forEach(book => {
         const row = document.createElement('tr');
         
-        // Create image cell - placeholder since we don't have image handling yet
+        // Create image cell - now handles actual images if available
         const imgCell = document.createElement('td');
-        imgCell.innerHTML = '<div style="width:50px;height:70px;background:#f0f0f0;display:flex;align-items:center;justify-content:center;border:1px solid #ddd;">📚</div>';
+        if (book.bookImage && book.bookImage !== null) {
+            imgCell.innerHTML = `<img src="${book.bookImage}" style="width:50px;height:70px;object-fit:cover;border:1px solid #ddd;" alt="Book cover">`;
+        } else {
+            imgCell.innerHTML = '<div style="width:50px;height:70px;background:#f0f0f0;display:flex;align-items:center;justify-content:center;border:1px solid #ddd;">📚</div>';
+        }
         
         // Create other cells
         row.innerHTML = `
@@ -120,9 +131,16 @@ function filterBooks() {
         }
     });
     
+    // Remove any existing "no results" rows
+    const existingNoResults = document.querySelector('.no-results-row');
+    if (existingNoResults) {
+        existingNoResults.remove();
+    }
+    
     // Show message if no books match the search
     if (visibleCount === 0 && rows.length > 0 && rows[0].cells.length > 1) {
         const noResultsRow = document.createElement('tr');
+        noResultsRow.className = 'no-results-row';
         noResultsRow.innerHTML = `
             <td colspan="6" style="text-align: center; padding: 20px; color: #666;">
                 No books found matching "${searchValue}".

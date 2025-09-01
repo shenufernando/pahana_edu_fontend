@@ -1,11 +1,105 @@
- <!DOCTYPE html>
-
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Edit Customer - Pahana Edu</title>
   <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    .form-section {
+      padding: 40px 20px;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      min-height: calc(100vh - 80px);
+    }
+    
+    .form-container {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    
+    input[type="text"],
+    input[type="number"] {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      border: 2px solid #ddd;
+      border-radius: 5px;
+      font-size: 16px;
+      transition: border-color 0.3s ease;
+      box-sizing: border-box;
+    }
+    
+    input[type="text"]:focus,
+    input[type="number"]:focus {
+      border-color: #003366;
+      outline: none;
+    }
+    
+    input[type="submit"] {
+      width: 100%;
+      padding: 12px;
+      background-color: #003366;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin-top: 20px;
+    }
+    
+    input[type="submit"]:hover:not(:disabled) {
+      background-color: #ff9900;
+    }
+    
+    input[type="submit"]:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+    
+    .back-link {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+      color: #003366;
+      text-decoration: none;
+      font-weight: bold;
+      padding: 12px;
+      border: 2px solid #003366;
+      border-radius: 5px;
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      color: white;
+      background-color: #003366;
+      text-decoration: none;
+    }
+    
+    h2 {
+      text-align: center;
+      color: #003366;
+      margin-bottom: 30px;
+      font-size: 28px;
+    }
+    
+    .navbar {
+      background: linear-gradient(135deg, #003366 0%, #002244 100%);
+    }
+    
+    .account-no-display {
+      background-color: #f0f0f0;
+      padding: 12px;
+      border: 2px solid #ddd;
+      border-radius: 5px;
+      margin: 8px 0;
+      font-size: 16px;
+    }
+  </style>
 </head>
 <body>
 
@@ -13,34 +107,34 @@
   <header class="navbar">
     <div class="logo">📘 Pahana Edu</div>
     <nav class="nav-links">
-      <a href="cashier_dashboard.html">Home</a>
+      <a href="admin_dashboard.html">Home</a>
+      <a href="view_customers.html">Back to Customers</a>
       <a href="logout.html">Logout</a>
     </nav>
   </header>
 
-  <!-- Customer Form --> 
+  <!-- Edit Customer Form -->
   <section class="form-section">
     <div class="form-container">
       <h2>Edit Customer</h2>
 
-      <form action="AddCustomerServlet" method="post">
-        <input type="text" name="accountNo" placeholder="Account Number" required />
-        <input type="text" name="name" placeholder="Customer Name" required />
-        <input type="text" name="address" placeholder="Address" required />
-        <input type="text" name="phone" placeholder="Phone Number" required />
-        
-
-        
-
+      <form id="editCustomerForm">
+        <div class="account-no-display" id="accountNoDisplay">
+          Account Number: Loading...
+        </div>
+        <input type="hidden" name="accountNo" id="accountNo" />
+        <input type="text" name="name" id="name" placeholder="Customer Name" required />
+        <input type="text" name="address" id="address" placeholder="Address" required />
+        <input type="text" name="phone" id="phone" placeholder="Phone Number (10 digits)" required pattern="[0-9]{10}" title="Enter 10 digit phone number"/>
+        <input type="number" name="unitsConsumed" id="unitsConsumed" placeholder="Units Consumed (optional)" min="0" />
         <input type="submit" value="Update Customer" />
       </form>
 
-      <a class="login-link" href="view_customers.html">View Customer Records</a>
+      <a class="back-link" href="view_customers.html">← Back to Customer Records</a>
     </div>
   </section>
-  
-   <script src="../js/edit_customer.js"></script>
 
-
+  <!-- JavaScript -->
+  <script src="../js/edit_customer.js"></script>
 </body>
 </html>

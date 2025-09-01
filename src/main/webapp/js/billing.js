@@ -83,7 +83,7 @@ function populateCustomerDropdown(customers) {
 async function loadBooks() {
     try {
         console.log("Loading books...");
-        const response = await fetch('http://localhost:8080/Pahana_edu_backend2/GetBooksServlet', {
+        const response = await fetch('http://localhost:8080/Pahana_edu_backend2/BookTitlesServlet', {
             method: 'GET',
             credentials: 'include'
         });

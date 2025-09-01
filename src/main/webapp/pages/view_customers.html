@@ -1,11 +1,92 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Customer Records - Pahana Edu</title>
   <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    .table-section {
+      padding: 40px 20px;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      min-height: calc(100vh - 80px);
+    }
+    
+    .table-container {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      max-width: 1200px;
+      margin: 0 auto;
+      overflow-x: auto;
+    }
+    
+    .search-bar {
+      margin: 20px 0;
+      text-align: center;
+    }
+    
+    .search-bar input {
+      width: 100%;
+      max-width: 400px;
+      padding: 12px;
+      border: 2px solid #ddd;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    
+    th {
+      background-color: #003366;
+      color: white;
+      font-weight: bold;
+    }
+    
+    tr:hover {
+      background-color: #f5f5f5;
+    }
+    
+    .action-links {
+      text-align: center;
+    }
+    
+    .edit-link {
+      color: #003366;
+      text-decoration: none;
+      padding: 5px 10px;
+      border: 1px solid #003366;
+      border-radius: 3px;
+      transition: all 0.3s ease;
+    }
+    
+    .edit-link:hover {
+      background-color: #003366;
+      color: white;
+    }
+    
+    .navbar {
+      background: linear-gradient(135deg, #003366 0%, #002244 100%);
+    }
+    
+    h2 {
+      text-align: center;
+      color: #003366;
+      margin-bottom: 30px;
+      font-size: 28px;
+    }
+  </style>
 </head>
 <body>
 
@@ -21,13 +102,12 @@
   <!-- Customer Records Table -->
   <section class="table-section">
     <div class="table-container">
-      <h2 style="text-align:center; margin-top: 20px;">Customer Records</h2>
+      <h2>Customer Records</h2>
       
-      
-            <!-- Search Input -->
-  <div class="search-bar">
-    <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Search for Customer records...">
-  </div>
+      <!-- Search Input -->
+      <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Search for Customer records...">
+      </div>
 
       <table id="customerTable">
         <thead>
@@ -41,34 +121,16 @@
           </tr>
         </thead>
         <tbody>
-          <!-- Sample Data -->
+          <!-- Data will be loaded dynamically -->
           <tr>
-            <td>1001</td>
-            <td>John Silva</td>
-            <td>Colombo 7</td>
-            <td>0712345678</td>
-            <td>150</td>
-            <td class="action-links">
-              <a href="edit_customer.html?accountNo=1001" class="edit-link">Edit</a>
-            </td>
+            <td colspan="6" style="text-align: center;">Loading customers...</td>
           </tr>
-          <tr>
-            <td>1002</td>
-            <td>Sara Perera</td>
-            <td>Kandy</td>
-            <td>0779876543</td>
-            <td>90</td>
-            <td class="action-links">
-              <a href="edit_customer.html?accountNo=1002" class="edit-link">Edit</a>
-            </td>
-          </tr>
-          <!-- Add more rows dynamically -->
         </tbody>
       </table>
     </div>
   </section>
   
-  <script src="../js/script.js"></script>
+  <script src="../js/view_customer.js"></script>
 
 </body>
 </html>

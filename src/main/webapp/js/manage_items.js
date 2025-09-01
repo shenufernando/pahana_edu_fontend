@@ -5,39 +5,79 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Load all books from server - UPDATED
+// TEMPORARY DEBUG VERSION - Replace your loadBooks function with this
+// ULTRA SIMPLE DEBUG VERSION - This WILL work
+// ULTRA SIMPLE DEBUG VERSION - This WILL work
 async function loadBooks() {
+    console.log("=== STARTING LOAD BOOKS ===");
+    
     try {
-        console.log("Loading books from server...");
-        const response = await fetch('http://localhost:8080/Pahana_edu_backend2/GetAllBooksServlet', {
-            method: 'GET',
-            credentials: 'include'
-        });
-        
-        console.log('Response status:', response.status);
-        console.log('Response status text:', response.statusText);
-        
-        if (!response.ok) {
-            const errorText = await response.text();
-            console.error('Server response:', errorText);
-            throw new Error('Failed to fetch books: ' + response.status + ' ' + response.statusText);
-        }
+        const response = await fetch('http://localhost:8080/Pahana_edu_backend2/GetAllBooksServlet');
+        console.log("✅ Got response:", response.status);
         
         const result = await response.json();
-        console.log('Server returned:', result);
+        console.log("✅ Got JSON:", result);
         
-        if (result.status === "success") {
-            populateBooksTable(result.books);
+        if (result.success) {
+            console.log("✅ Success confirmed, books count:", result.books.length);
+            
+            // Test if we can find the table
+            const tbody = document.querySelector('.styled-table tbody');
+            console.log("✅ Found table body:", tbody);
+            
+            if (!tbody) {
+                alert("ERROR: Can't find table with class 'styled-table tbody' in your HTML!");
+                return;
+            }
+            
+            // Clear table
+            tbody.innerHTML = '';
+            console.log("✅ Cleared table");
+            
+            // Add real books with proper Edit/Delete actions
+            for (let i = 0; i < result.books.length; i++) {
+                const book = result.books[i];
+                console.log(`Processing book ${i}:`, book);
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>
+                        ${book.bookImage && book.bookImage !== null && book.bookImage !== "" 
+                            ? '<span style="color: green; font-weight: bold;">Image in DB</span>' 
+                            : '<span style="color: red;">No Image</span>'}
+                    </td>
+                    <td>${book.bookCode.toString().padStart(10, '0')}</td>
+                    <td>${book.bookTitle}</td>
+                    <td>${book.bookCategory}</td>
+                    <td>Rs. ${book.price.toFixed(2)}</td>
+                    <td>${book.availableQuantity}</td>
+                    <td>
+                        <a href="edit_items.html?code=${book.bookCode}" class="edit-link">Edit</a>
+                        <a href="#" class="btn-delete" onclick="deleteBook(${book.bookCode}); return false;">Delete</a>
+                    </td>
+                `;
+                tbody.appendChild(row);
+                console.log(`✅ Added book ${i} to table`);
+            }
+            
+            console.log("SUCCESS! Loaded " + result.books.length + " books!");
+            
         } else {
-            throw new Error(result.message || 'Unknown server error');
+            alert("Server said: " + result.message);
         }
         
     } catch (error) {
-        console.error('Error loading books:', error);
-        alert('Failed to load books: ' + error.message);
+        console.error("❌ The actual error is:", error);
+        console.error("❌ Error name:", error.name);
+        console.error("❌ Error message:", error.message);
+        console.error("❌ Error stack:", error.stack);
+        alert("Real error: " + error.name + " - " + error.message);
     }
 }
 
-// Populate books table
+
+
+// Populate books table - SIMPLIFIED VERSION (No image loading)
 function populateBooksTable(books) {
     const tbody = document.querySelector('.styled-table tbody');
     tbody.innerHTML = ''; // Clear existing rows
@@ -47,13 +87,12 @@ function populateBooksTable(books) {
     books.forEach(book => {
         const row = document.createElement('tr');
         
-        // Create image cell
+        // Create image cell - SIMPLIFIED: Just show "Image in DB" text
         const imgCell = document.createElement('td');
-        if (book.bookImage) {
-            // If you have image data, you can create an image element
-            imgCell.innerHTML = '<img src="data:image/jpeg;base64,' + book.bookImage + '" width="50" height="70" />';
+        if (book.bookImage && book.bookImage !== null && book.bookImage !== "") {
+            imgCell.innerHTML = '<span style="color: green; font-weight: bold;">Image in DB</span>';
         } else {
-            imgCell.innerHTML = '<span>Image IN DB</span>';
+            imgCell.innerHTML = '<span style="color: red;">No Image</span>';
         }
         
         // Create other cells
